@@ -27,12 +27,15 @@ Adobe InDesignを利用してフォントリストを生成するスクリプト
 
 # インストール方法
 
-1.  GitHubリポジトリから本スクリプトを含むZIPファイルをダウンロードします。<!-- TODO: キャプチャ入れる -->
+1.  GitHubリポジトリから本スクリプトを含むZIPファイルをダウンロードします。  
+    ![GitHubからzipファイルのダウンロード](src/ss-download-zip.png)
 2.  ダウンロードしたファイルを解凍します。
-3.  解凍してできた一式のファイル群を、Adobe InDesignのスクリプトフォルダ内に保存します。<!-- TODO: キャプチャか模式図を入れる -->
+3.  解凍してできた一式のファイル群を、Adobe InDesignのスクリプトフォルダ内に保存します。
   * スクリプトフォルダの場所はOSやInDesignのバージョンによって異なります。下記は一例です
-    * Macの場合：`ユーザー]/Library/Preferences/Adobe InDesign/[InDesignのバージョン]/ja_JP/Scripts/Scripts Panel`
-    * Windowsの場合：`C:\Users\[ユーザー]\AppData\Roaming\Adobe\InDesign\Version [InDesignのバージョン]-J\Scripts\Scripts Panel`
+    * Macの場合：  
+      `[ユーザー名]/Library/Preferences/Adobe InDesign/[InDesignのバージョン]/ja_JP/Scripts/Scripts Panel`
+    * Windowsの場合：  
+      `C:\Users\[ユーザー名]\AppData\Roaming\Adobe\InDesign\Version [InDesignのバージョン]-J\Scripts\Scripts Panel`
 
 # 使い方
 
@@ -60,8 +63,8 @@ Adobe InDesignを利用してフォントリストを生成するスクリプト
   * `[言語コード]`：`J`（日本語用）または `E`（欧文用）を行頭に記述します。
   * `\t`：タブ文字です。言語コードとフォント名の区切りに使用します。
   * `[フォントファミリー名またはフォント名]`：リストに含めたいフォントの名前を記述します。
-    * InDesignの文字パネルから直接コピーすると間違いがなく作成しやすいです。
-      ![フォントリストの作成](src/ss-procedure-05.gif)
+    * 同梱の[ID_makeFontLists.jsx](./ID_makeFontLists.jsx)を使うと、選択したテキストフレームに使用されているフォントをまとめてリスト化できます。
+      ![フォントリストの作成](src/readme-makeFontList.gif)
     * **例**（タブは分かりやすいように`\t`と表記しています）：
       ```text
       J\tA P-OTF 欅明朝 Oldstyle Min2
@@ -85,12 +88,12 @@ Adobe InDesignを利用してフォントリストを生成するスクリプト
   ![テンプレートドキュメントを開いたところ](src/ss-procedure-01.png)
 2.  InDesignのスクリプトパネルから、保存した本スクリプトを選択し、実行します。
 3.  スクリプト実行後に表示されるファイル選択ダイアログで、事前に作成したフォントリストファイル（`.txt`形式）を選択します。**複数のファイルをまとめて選択することも可能です**。
-  ![スクリプトの実行](src/ss-procedure-02.gif)
+  ![スクリプトの実行](src/readme-fontListGenerator.gif)
 4.  ファイルを選択して「開く」ボタンをクリックすると、スクリプトがフォントリストの生成を開始します。
 5.  指定したフォントの数によっては時間がかかる場合があります。スクリプトが完了すると、InDesignドキュメントにフォントリストが生成されています。
 6.  生成されたドキュメントを確認し、必要に応じてPDFへの書き出しやプリントアウトを行います。
 7.  **例文の一括編集:** 生成されたリストの例文は、テンプレートファイルの一番最初のページ（または各セクションの最初のページ）にある例文を参照しています（InDesignの相互参照機能）。例文を編集し、相互参照を更新することで、生成されたすべての例文を一度に変更できます。
-  ![例文の一括編集](src/ss-procedure-03.gif)
+  ![例文の一括編集](src/readme-changeSampleSentence.gif)
 
 ## テンプレートファイルの作成
 
@@ -108,9 +111,9 @@ Adobe InDesignを利用してフォントリストを生成するスクリプト
 * **段落スタイル**：
   * `例文`（自動生成するフォントリストの表組に使用します）
 
-## トラブルシューティング
+## 注意事項
 
-  
+* 合成フォントにも対応していますが、ウェイト表記が「-」となります
 
 # ライセンス
 
