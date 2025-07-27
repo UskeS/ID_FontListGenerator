@@ -104,28 +104,29 @@ function importSettings() {
   var targetFiles = File.openDialog("フォントリスト設定ファイルを選択してください。", setFileType(), true);
   var re = /^[JE]\t/; // JとE以外のオプションを加えたらここも修正
   if (!targetFiles) { exit(); }
-    for (var i = 0; i < targetFiles.length; i++) {
-      try {
-        var openFlag = targetFiles[i].open("r");
-        if (!openFlag) {
-          throw new Error(targetFiles[i].fsName + "が開けませんでした。");
-        }
-        var curInfo = {
-          categoryName: targetFiles[i].displayName.replace(/\.txt/i, ""),
-          fontList: targetFiles[i].read(99999).split("\n")
-        };
-        if (curInfo.fontList.length === 0) { throw new Error("フォントが記述されたファイルを指定してください。"); }
-        else if (!hasEveryContent(curInfo.fontList, re)) { throw new Error("フォントリストの記述が正しくありません。\r和文サンプルであれば行頭にJ、欧文サンプルであれば行頭にEを入れ、タブで区切ったあとフォント名を記述してください。"); }
-        result.push(curInfo);
-      } catch(e) {
-        alert(e);
-        isError = true;
-      } finally {
-        targetFiles[i].close();
+  for (var i = 0; i < targetFiles.length; i++) {
+    try {
+      var openFlag = targetFiles[i].open("r");
+      if (!openFlag) {
+        throw new Error(targetFiles[i].fsName + "が開けませんでした。");
       }
-      if (isError) { exit(); }
+      // TODO: 1行ずつ読み込み→空行でなければ配列に追加という処理に変更  //
+      var curInfo = {
+        categoryName: targetFiles[i].displayName.replace(/\.txt/i, ""),
+        fontList: targetFiles[i].read(99999).split("\n")
+      };
+      if (curInfo.fontList.length === 0) { throw new Error("フォントが記述されたファイルを指定してください。"); }
+      else if (!hasEveryContent(curInfo.fontList, re)) { throw new Error("フォントリストの記述が正しくありません。\r和文サンプルであれば行頭にJ、欧文サンプルであれば行頭にEを入れ、タブで区切ったあとフォント名を記述してください。"); }
+      result.push(curInfo);
+    } catch(e) {
+      alert(e);
+      isError = true;
+    } finally {
+      targetFiles[i].close();
     }
-    return result;
+    if (isError) { exit(); }
+  }
+  return result;
 }
 
 /**
