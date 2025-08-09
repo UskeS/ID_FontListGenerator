@@ -1,10 +1,12 @@
 /**
  * @fileoverview ID_FontListGenerator
- * @version  v0.9.0b
+ * @version  v1.0.0
  * @author  Yusuke SAEGUSA
  * @description 
  * 動作保証バージョン InDesign 2024(v19.5.3)/2025(v20.2)
  */
+
+//@tagetengine "FontListGenerator"
 
 // 参照用定数
 var doc = app.documents[0];
@@ -45,6 +47,7 @@ if (!doc.textFrames.item(constant.exSentence.J).isValid
 
 // メイン処理
 app.doScript(main, ScriptLanguage.JAVASCRIPT, null, UndoModes.ENTIRE_SCRIPT);
+alert("フォントリストの生成が完了しました。");
 
 /**
  * メイン関数
@@ -81,6 +84,7 @@ function main() {
       }
       if (tempFont.status === FontStatus.NOT_AVAILABLE || tempFont.status === FontStatus.FAUXED) {
         alert("「" + contObj.family + " " + contObj.weights[0] + "」が利用できません。");
+        doc.close(SaveOptions.NO); // エラー終了の場合はドキュメントを閉じる
         exit();
       }
       insertTable(tgtTxf.insertionPoints[-1], contObj, tempFont);
@@ -103,20 +107,30 @@ function importSettings() {
   var result = [], isError = false;
   var targetFiles = File.openDialog("フォントリスト設定ファイルを選択してください。", setFileType(), true);
   var re = /^[JE]\t/; // JとE以外のオプションを加えたらここも修正
+  var re_blankLine = /^ *[\n\r]?$/;
   if (!targetFiles) { exit(); }
   for (var i = 0; i < targetFiles.length; i++) {
+    var curInfo = {
+      categoryName: targetFiles[i].fullName.replace(/\.txt/i, "").match(/([^\/]+$)/)[1], // カテゴリー名：フォントリストファイルのファイル名
+      fontList: [] // フォントリスト：フォントリストの配列
+    };
+    var tempFontList = "";
     try {
       var openFlag = targetFiles[i].open("r");
       if (!openFlag) {
         throw new Error(targetFiles[i].fsName + "が開けませんでした。");
       }
-      // TODO: 1行ずつ読み込み→空行でなければ配列に追加という処理に変更  //
-      var curInfo = {
-        categoryName: targetFiles[i].displayName.replace(/\.txt/i, ""),
-        fontList: targetFiles[i].read(99999).split("\n")
-      };
-      if (curInfo.fontList.length === 0) { throw new Error("フォントが記述されたファイルを指定してください。"); }
-      else if (!hasEveryContent(curInfo.fontList, re)) { throw new Error("フォントリストの記述が正しくありません。\r和文サンプルであれば行頭にJ、欧文サンプルであれば行頭にEを入れ、タブで区切ったあとフォント名を記述してください。"); }
+      tempFontList = targetFiles[i].read(99999).split("\n");
+      if (tempFontList.length === 0) { throw new Error("フォントが記述されたファイルを指定してください。"); }
+      for (var j = 0; j < tempFontList.length; j++) {
+        var tempListItem = tempFontList[j];
+        if (typeof tempListItem === "string" && !re_blankLine.test(tempListItem)) {
+          if (!re.test(tempListItem)) {
+            throw new Error("フォントリストの記述が正しくありません。\r和文サンプルであれば行頭にJ、欧文サンプルであれば行頭にEを入れ、タブで区切ったあとフォント名を記述してください。");
+          }
+          else { curInfo.fontList.push(tempListItem); }
+        }
+      }
       result.push(curInfo);
     } catch(e) {
       alert(e);
@@ -142,20 +156,6 @@ function setFileType() {
   } else if (/^win/i.test($.os)) {
     return "*.txt";
   }
-}
-
-/**
- * 配列の要素すべてを正規表現でチェックし、ひとつでもマッチしなければfalseを返す
- *
- * @param {String[]} ary フォントリスト
- * @param {RegExp} re リストをチェックする正規表現
- * @return {Boolean} ひとつでもfalseがあればfalse
- */
-function hasEveryContent(ary, re) {
-  for (var i = 0; i < ary.length; i++) {
-    if (!re.test(ary[i])) { return false; }
-  }
-  return true;
 }
 
 /**
@@ -239,6 +239,7 @@ function getWeightString(fontFam) {
   }
   if (result.length === 0) {
     alert("「"+ fontFam + "」が見つかりませんでした。フォント名を確認してください。");
+    doc.close(SaveOptions.NO); // エラー終了の場合はドキュメントを閉じる
     exit();
   }
   return result;
