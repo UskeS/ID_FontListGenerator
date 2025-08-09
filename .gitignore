@@ -1,4 +1,4 @@
 /fontList
-.DS_Store
 .vscode
-/src/.DS_Store
+src/.DS_Store
+.gitignore
