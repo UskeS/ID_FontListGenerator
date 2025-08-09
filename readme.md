@@ -27,8 +27,11 @@ Adobe InDesignを利用してフォントリストを生成するスクリプト
 
 # インストール方法
 
-1.  GitHubリポジトリから本スクリプトを含むZIPファイルをダウンロードします。  
+1.  GitHubリポジトリから本スクリプトを含むZIPファイルをダウンロードします。下記いずれかの方法でダウンロードしてください。
+    1. リポジトリ右上の <img src="src/code_button.png" alt="codeボタン" width="70" style="vertical-align: middle;"> を押し、Download ZIPを選択します。
     ![GitHubからzipファイルのダウンロード](src/ss-download-zip.png)
+    2. [Releases](https://github.com/UskeS/ID_FontListGenerator/releases)から、**Source code**を選択します。
+    ![Releasesからダウンロード](src/releases.png)
 2.  ダウンロードしたファイルを解凍します。
 3.  解凍してできた一式のファイル群を、Adobe InDesignのスクリプトフォルダ内に保存します。
   * スクリプトフォルダの場所はOSやInDesignのバージョンによって異なります。下記は一例です
