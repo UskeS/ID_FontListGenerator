@@ -1,12 +1,12 @@
 /**
  * @fileoverview ID_FontListGenerator
- * @version  v1.0.0
+ * @version  v1.0.1
  * @author  Yusuke SAEGUSA
  * @description 
  * 動作保証バージョン InDesign 2024(v19.5.3)/2025(v20.2)
  */
 
-//@tagetengine "FontListGenerator"
+//@targetengine "FontListGenerator"
 
 // 参照用定数
 var doc = app.documents[0];
